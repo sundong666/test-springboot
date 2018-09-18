@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.asiainfo.springboot.mapper.EmployeeMapper" >
+  <resultMap id="BaseResultMap" type="com.asiainfo.springboot.model.Employee" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <id column="dept_id" property="deptId" javaType="INTEGER"/>
+    <result column="last_name" property="lastName" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="BIT" />
+    <result column="birth" property="birth" jdbcType="DATE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, dept_id, last_name, email, gender, birth
+  </sql>
+
+  <select id="selectAllEmployees" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM  tb_employee
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_employee
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_employee
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.asiainfo.springboot.model.Employee" >
+    insert into tb_employee (id, dept_id, last_name, email,
+      gender, birth)
+    values (#{id,jdbcType=INTEGER}, #{deptId,jdbcType=INTEGER}, #{lastName,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
+      #{gender,jdbcType=BIT}, #{birth,jdbcType=DATE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.asiainfo.springboot.model.Employee" >
+    insert into tb_employee
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="lastName != null" >
+        last_name,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="gender != null" >
+        gender,
+      </if>
+      <if test="birth != null" >
+        birth,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="lastName != null" >
+        #{lastName,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=BIT},
+      </if>
+      <if test="birth != null" >
+        #{birth,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.asiainfo.springboot.model.Employee" >
+    update tb_employee
+    <set >
+      <if test="lastName != null" >
+        last_name = #{lastName,jdbcType=VARCHAR},
+      </if>
+      <if test="deptId != null">
+        dept_id = #{deptId, jdbcType=INTEGER},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        gender = #{gender,jdbcType=BIT},
+      </if>
+      <if test="birth != null" >
+        birth = #{birth,jdbcType=DATE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.asiainfo.springboot.model.Employee" >
+    update tb_employee
+    set last_name = #{lastName,jdbcType=VARCHAR},
+      dept_id = #{deptId, jdbcType=INTEGER}
+      email = #{email,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=BIT},
+      birth = #{birth,jdbcType=DATE}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
